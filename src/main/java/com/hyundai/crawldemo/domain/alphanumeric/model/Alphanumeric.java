@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 
 @Getter
 @RequiredArgsConstructor
@@ -24,6 +25,11 @@ public class Alphanumeric {
     List<Character> upperCases = new ArrayList<>();
     List<Character> lowerCases = new ArrayList<>();
     List<Character> numbers = new ArrayList<>();
+
+    if (!StringUtils.hasText(input)) {
+      return new Alphanumeric(upperCases, lowerCases, numbers);
+    }
+
     char[] chars = input.toCharArray();
     for (char character : chars) {
       if (Character.isUpperCase(character)) {

@@ -28,6 +28,22 @@ class AlphanumericTest {
   }
 
   @Test
+  @DisplayName("생성자 test - input null")
+  public void constructorTest_null() throws Exception {
+    // given
+    String input = null;
+
+    // when
+    Alphanumeric alphanumeric = Alphanumeric.createByString(input);
+
+    // then
+    assertThat(alphanumeric).isNotNull();
+    assertThat(alphanumeric.getUpperCases()).isEmpty();
+    assertThat(alphanumeric.getLowerCases()).isEmpty();
+    assertThat(alphanumeric.getNumbers()).isEmpty();
+  }
+
+  @Test
   @DisplayName("정렬 test")
   public void sortTest() throws Exception {
     // given
@@ -53,6 +69,22 @@ class AlphanumericTest {
     // given
     String input = "dEaG28A5Fk1Q";
     String expected = "Aa1Ed2Fk5G8Q";
+    Alphanumeric alphanumeric = Alphanumeric.createByString(input);
+    alphanumeric.sort();
+
+    // when
+    String merge = alphanumeric.merge();
+
+    // then
+    assertThat(merge).isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("병합 Test - 빈 객체")
+  public void mergeTest_emptyString() throws Exception {
+    // given
+    String input = null;
+    String expected = "";
     Alphanumeric alphanumeric = Alphanumeric.createByString(input);
     alphanumeric.sort();
 
