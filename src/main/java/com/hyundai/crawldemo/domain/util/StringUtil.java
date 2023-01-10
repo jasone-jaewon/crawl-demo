@@ -5,7 +5,7 @@ import org.springframework.util.StringUtils;
 public class StringUtil {
 
   private static final String ALPHANUMERIC_REGEX = "[^A-Za-z\\d]+";
-  private static final String EMPTY_STRING = "";
+  public static final String EMPTY_STRING = "";
 
 
   /**
