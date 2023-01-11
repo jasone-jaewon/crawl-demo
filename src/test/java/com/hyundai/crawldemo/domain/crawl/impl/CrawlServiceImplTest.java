@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.hyundai.crawldemo.domain.crawl.constant.CrawlConstant;
 import com.hyundai.crawldemo.domain.crawl.exception.InvalidUrlException;
+import com.hyundai.crawldemo.domain.crawl.model.CrawlResult;
 import com.hyundai.crawldemo.domain.crawl.port.CrawlService;
 import java.net.URI;
 import java.util.List;
@@ -27,10 +28,12 @@ class CrawlServiceImplTest {
     URI uri = URI.create(url);
 
     // when
-    String html = crawlService.crawl(uri);
+    CrawlResult result = crawlService.crawl(uri);
 
     // then
-    assertThat(html).isNotBlank();
+    assertThat(result).isNotNull();
+    assertThat(result.getUrl()).isEqualTo(url);
+    assertThat(result.getHtml()).isNotBlank();
   }
 
   @Test
@@ -52,10 +55,12 @@ class CrawlServiceImplTest {
     URI uri = URI.create(url);
 
     // when
-    String html = crawlService.crawl(uri);
+    CrawlResult result = crawlService.crawl(uri);
 
     // then
-    assertThat(html).isNotBlank();
+    assertThat(result).isNotNull();
+    assertThat(result.getUrl()).isEqualTo("https://" + url);
+    assertThat(result.getHtml()).isNotBlank();
   }
 
   @Test
@@ -66,11 +71,16 @@ class CrawlServiceImplTest {
     List<URI> uris = crawlUrls.stream().map(URI::create).toList();
 
     // when
-    List<String> htmlList = crawlService.crawlByUris(uris);
+    List<CrawlResult> results = crawlService.crawlByUris(uris);
 
     // then
-    assertThat(crawlUrls.size()).isEqualTo(htmlList.size());
-    htmlList.forEach(html -> assertThat(html).isNotBlank());
+    assertThat(results).isNotEmpty();
+    assertThat(crawlUrls.size()).isEqualTo(results.size());
+    results.forEach(result -> {
+      assertThat(result).isNotNull();
+      assertThat(result.getUrl()).isIn(crawlUrls);
+      assertThat(result.getHtml()).isNotBlank();
+    });
   }
 
   @Test
