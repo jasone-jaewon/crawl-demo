@@ -44,17 +44,18 @@ class AlphanumericTest {
   }
 
   @Test
-  @DisplayName("정렬 test")
-  public void sortTest() throws Exception {
+  @DisplayName("병합 test")
+  public void mergeTest() throws Exception {
     // given
-    String input = "dEaG28A5Fk1";
-    List<Character> expectedLowerCases = List.of('a', 'd', 'k');
-    List<Character> expectedUpperCases = List.of('A', 'E', 'F', 'G');
-    List<Character> expectedNumbers = List.of('1', '2', '5', '8');
-    Alphanumeric alphanumeric = Alphanumeric.createByString(input);
+    Alphanumeric alphanumeric1 = Alphanumeric.createByString("aAdE125FGk8");
+    Alphanumeric alphanumeric2 = Alphanumeric.createByString("fEThNV5FGgeoi120");
+    List<Character> expectedUpperCases = List.of('A', 'E', 'F', 'G', 'N', 'T', 'V');
+    List<Character> expectedLowerCases = List.of('a', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'o');
+    List<Character> expectedNumbers = List.of('0', '1', '2', '5', '8');
+
 
     // when
-    alphanumeric.sort();
+    Alphanumeric alphanumeric = Alphanumeric.merge(List.of(alphanumeric1, alphanumeric2));
 
     // then
     assertThat(alphanumeric).isNotNull();
@@ -63,33 +64,32 @@ class AlphanumericTest {
     assertThat(alphanumeric.getNumbers()).isEqualTo(expectedNumbers);
   }
 
+
   @Test
-  @DisplayName("병합 Test")
-  public void mergeTest() throws Exception {
+  @DisplayName("문자열 병합 Test")
+  public void mergeToStringTest() throws Exception {
     // given
     String input = "dEaG28A5Fk1Q";
     String expected = "Aa1Ed2Fk5G8Q";
     Alphanumeric alphanumeric = Alphanumeric.createByString(input);
-    alphanumeric.sort();
 
     // when
-    String merge = alphanumeric.merge();
+    String merge = alphanumeric.mergeToString();
 
     // then
     assertThat(merge).isEqualTo(expected);
   }
 
   @Test
-  @DisplayName("병합 Test - 빈 객체")
-  public void mergeTest_emptyString() throws Exception {
+  @DisplayName("문자열 병합 Test - 빈 객체")
+  public void mergeToStringTest_emptyString() throws Exception {
     // given
     String input = null;
     String expected = "";
     Alphanumeric alphanumeric = Alphanumeric.createByString(input);
-    alphanumeric.sort();
 
     // when
-    String merge = alphanumeric.merge();
+    String merge = alphanumeric.mergeToString();
 
     // then
     assertThat(merge).isEqualTo(expected);

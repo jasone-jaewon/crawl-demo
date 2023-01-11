@@ -1,5 +1,6 @@
 package com.hyundai.crawldemo.domain.crawl.port;
 
+import com.hyundai.crawldemo.domain.crawl.model.CrawlResult;
 import java.net.URI;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface CrawlService {
    * @param url crawling 할 url
    * @return html string
    */
-  String crawl(URI url);
+  CrawlResult crawl(URI url);
 
   /**
    * url 에 해당하는 html 정보 crawling(병렬)
@@ -19,6 +20,6 @@ public interface CrawlService {
    * @param urls crawling 할 url 목록
    * @return html 목록
    */
-  List<String> crawlByUris(List<URI> urls);
+  List<CrawlResult> crawlByUris(List<URI> urls);
 
 }
