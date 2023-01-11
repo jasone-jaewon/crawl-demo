@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.hyundai.crawldemo.domain.crawl.constant.CrawlConstant;
 import com.hyundai.crawldemo.domain.crawl.exception.CrawlFailException;
 import com.hyundai.crawldemo.domain.crawl.port.CrawlService;
+import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +24,10 @@ class CrawlServiceImplTest {
   public void crawlTest() throws Exception {
     // given
     String url = "https://www.kia.com";
+    URI uri = URI.create(url);
 
     // when
-    String html = crawlService.crawl(url);
+    String html = crawlService.crawl(uri);
 
     // then
     assertThat(html).isNotBlank();
@@ -36,9 +38,10 @@ class CrawlServiceImplTest {
   public void crawlTest_invalidUrl() throws Exception {
     // given
     String url = "https://www.nonexistent.qqq.front";
+    URI uri = URI.create(url);
 
     // when & then
-    assertThrows(CrawlFailException.class, () -> crawlService.crawl(url));
+    assertThrows(CrawlFailException.class, () -> crawlService.crawl(uri));
   }
 
   @Test
@@ -46,9 +49,10 @@ class CrawlServiceImplTest {
   public void crawlConcurrentlyTest() throws Exception {
     // given
     List<String> crawlUrls = CrawlConstant.CRAWL_URLS;
+    List<URI> uris = crawlUrls.stream().map(URI::create).toList();
 
     // when
-    List<String> htmlList = crawlService.crawlByUrls(crawlUrls);
+    List<String> htmlList = crawlService.crawlByUris(uris);
 
     // then
     assertThat(crawlUrls.size()).isEqualTo(htmlList.size());
@@ -61,8 +65,9 @@ class CrawlServiceImplTest {
     // given
     String invalidUrl = "https://www.nonexistent.qqq.front";
     List<String> crawlUrls = List.of(CrawlConstant.KIA_URL, invalidUrl);
+    List<URI> uris = crawlUrls.stream().map(URI::create).toList();
 
     // when & then
-    assertThrows(CrawlFailException.class, () -> crawlService.crawlByUrls(crawlUrls));
+    assertThrows(CrawlFailException.class, () -> crawlService.crawlByUris(uris));
   }
 }
