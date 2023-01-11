@@ -18,16 +18,26 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class HtmlAlphanumericServiceImpl implements HtmlAlphanumericService {
 
+  private final CacheService cacheService;
   private final AlphanumericService alphanumericService;
   private final CrawlService crawlService;
 
   @Override
   public Alphanumeric getAlphanumericFromUris(List<URI> uris) {
-    List<CrawlResult> crawlResults = crawlService.crawlByUris(uris);
+    List<URI> notCachedUris = new ArrayList<>();
+    List<Alphanumeric> alphanumerics = new ArrayList<>();
 
-    List<Alphanumeric> alphanumerics = crawlResults.stream()
-        .map(alphanumericService::parse)
-        .toList();
+    uris.forEach(uri -> cacheService.getValue(uri.toString(), Alphanumeric.class)
+        .ifPresentOrElse(alphanumerics::add, () -> notCachedUris.add(uri))
+    );
+
+    List<CrawlResult> crawlResults = crawlService.crawlByUris(notCachedUris);
+
+    crawlResults.forEach(crawlResult -> {
+      Alphanumeric parsedAlphanumeric = alphanumericService.parse(crawlResult);
+      alphanumerics.add(parsedAlphanumeric);
+      cacheService.setValue(crawlResult.getUrl(), parsedAlphanumeric);
+    });
 
     return Alphanumeric.merge(alphanumerics);
   }
