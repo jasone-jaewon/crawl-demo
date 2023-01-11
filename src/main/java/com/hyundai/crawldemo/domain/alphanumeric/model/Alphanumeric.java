@@ -4,12 +4,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 
 @Getter
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Alphanumeric {
 
   private final List<Character> upperCases;
@@ -74,7 +75,7 @@ public class Alphanumeric {
       numbers.addAll(new HashSet<>(alphanumeric.getNumbers()));
     });
 
-    // TODO: 2023/01/11 sorted 효율 수정
+    // TODO: 2023/01/11 sorted 효율 수정(출력 할때 정렬)
     return new Alphanumeric(
         upperCases.stream().sorted().toList(),
         lowerCases.stream().sorted().toList(),
