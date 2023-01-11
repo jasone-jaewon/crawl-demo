@@ -3,6 +3,7 @@ package com.hyundai.crawldemo.domain.crawl.impl;
 import com.hyundai.crawldemo.domain.crawl.exception.CrawlFailException;
 import com.hyundai.crawldemo.domain.crawl.port.CrawlService;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -16,16 +17,16 @@ public class CrawlServiceImpl implements CrawlService {
   /**
    * url 에 해당하는 html 정보 crawling
    *
-   * @param url crawling 할 url
+   * @param uri crawling 할 uri
    * @return html string
    */
   @Override
-  public String crawl(String url) {
+  public String crawl(URI uri) {
+    String url = uri.toString();
     try {
       Document document = Jsoup.connect(url).get();
       return document.toString();
     } catch (IOException e) {
-      log.error(e.getMessage());
       throw new CrawlFailException(url);
     }
   }
@@ -33,12 +34,12 @@ public class CrawlServiceImpl implements CrawlService {
   /**
    * url 에 해당하는 html 정보 crawling(병렬)
    *
-   * @param urls crawling 할 url
+   * @param uris crawling 할 uri list
    * @return html string
    */
   @Override
-  public List<String> crawlByUrls(List<String> urls) {
-    return urls.parallelStream()
+  public List<String> crawlByUris(List<URI> uris) {
+    return uris.parallelStream()
         .map(this::crawl)
         .toList();
   }
