@@ -1,8 +1,9 @@
 package com.hyundai.crawldemo.domain.alphanumeric.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -58,12 +59,27 @@ public class Alphanumeric {
   }
 
   /**
-   * 각 목록 정렬
+   * 서로 다른 알파벳 숫자 객체 병합
+   *
+   * @param alphanumerics 알파벳 숫자 객체 목록
+   * @return 병합된 알파벳 숫자 객체
    */
-  public void sort() {
-    Collections.sort(this.upperCases);
-    Collections.sort(this.lowerCases);
-    Collections.sort(this.numbers);
+  public static Alphanumeric merge(List<Alphanumeric> alphanumerics) {
+    Set<Character> upperCases = new HashSet<>();
+    Set<Character> lowerCases = new HashSet<>();
+    Set<Character> numbers = new HashSet<>();
+    alphanumerics.forEach(alphanumeric -> {
+      upperCases.addAll(new HashSet<>(alphanumeric.getUpperCases()));
+      lowerCases.addAll(new HashSet<>(alphanumeric.getLowerCases()));
+      numbers.addAll(new HashSet<>(alphanumeric.getNumbers()));
+    });
+
+    // TODO: 2023/01/11 sorted 효율 수정
+    return new Alphanumeric(
+        upperCases.stream().sorted().toList(),
+        lowerCases.stream().sorted().toList(),
+        numbers.stream().sorted().toList()
+    );
   }
 
   /**
@@ -71,7 +87,7 @@ public class Alphanumeric {
    *
    * @return 병합된 문자열
    */
-  public String merge() {
+  public String mergeToString() {
     StringBuilder builder = new StringBuilder();
     int maxLength = Math.max(this.lowerCases.size(), this.upperCases.size());
     maxLength = Math.max(maxLength, this.numbers.size());
