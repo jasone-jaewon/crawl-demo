@@ -1,9 +1,11 @@
 package com.hyundai.crawldemo.domain.crawl.impl;
 
 import com.hyundai.crawldemo.domain.crawl.exception.CrawlFailException;
+import com.hyundai.crawldemo.domain.crawl.exception.InvalidUrlException;
 import com.hyundai.crawldemo.domain.crawl.port.CrawlService;
 import java.io.IOException;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -30,6 +32,8 @@ public class CrawlServiceImpl implements CrawlService {
     try {
       Document document = Jsoup.connect(url).get();
       return document.toString();
+    } catch (UnknownHostException e) {
+      throw new InvalidUrlException(url);
     } catch (IOException e) {
       throw new CrawlFailException(url);
     }
