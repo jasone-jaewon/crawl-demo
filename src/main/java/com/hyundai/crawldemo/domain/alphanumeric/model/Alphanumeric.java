@@ -22,13 +22,17 @@ public class Alphanumeric {
    * @return Alphanumeric
    */
   public static Alphanumeric createByString(String input) {
-    List<Character> upperCases = new ArrayList<>();
-    List<Character> lowerCases = new ArrayList<>();
-    List<Character> numbers = new ArrayList<>();
-
     if (!StringUtils.hasText(input)) {
-      return new Alphanumeric(upperCases, lowerCases, numbers);
+      return new Alphanumeric(
+          Collections.emptyList(),
+          Collections.emptyList(),
+          Collections.emptyList()
+      );
     }
+
+    Set<Character> upperCases = new HashSet<>();
+    Set<Character> lowerCases = new HashSet<>();
+    Set<Character> numbers = new HashSet<>();
 
     char[] chars = input.toCharArray();
     for (char character : chars) {
@@ -45,7 +49,12 @@ public class Alphanumeric {
       }
     }
 
-    return new Alphanumeric(upperCases, lowerCases, numbers);
+    // TODO: 2023/01/11 sorted 효율 수정
+    return new Alphanumeric(
+        upperCases.stream().sorted().toList(),
+        lowerCases.stream().sorted().toList(),
+        numbers.stream().sorted().toList()
+    );
   }
 
   /**
