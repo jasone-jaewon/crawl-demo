@@ -9,10 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
 public class CrawlServiceImpl implements CrawlService {
+
+  private static final String DEFAULT_SCHEME = "https://";
 
   /**
    * url 에 해당하는 html 정보 crawling
@@ -22,7 +25,8 @@ public class CrawlServiceImpl implements CrawlService {
    */
   @Override
   public String crawl(URI uri) {
-    String url = uri.toString();
+    String url = StringUtils.hasText(uri.getScheme()) ? uri.toString() : DEFAULT_SCHEME + uri;
+
     try {
       Document document = Jsoup.connect(url).get();
       return document.toString();

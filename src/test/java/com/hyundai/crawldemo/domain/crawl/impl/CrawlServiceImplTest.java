@@ -45,6 +45,20 @@ class CrawlServiceImplTest {
   }
 
   @Test
+  @DisplayName("url 크롤링 test - uri protocol 정보 (https)가 없는 경우")
+  public void crawlTest_withoutScheme() throws Exception {
+    // given
+    String url = "www.kia.com";
+    URI uri = URI.create(url);
+
+    // when
+    String html = crawlService.crawl(uri);
+
+    // then
+    assertThat(html).isNotBlank();
+  }
+
+  @Test
   @DisplayName("병렬 크롤링 test")
   public void crawlConcurrentlyTest() throws Exception {
     // given
