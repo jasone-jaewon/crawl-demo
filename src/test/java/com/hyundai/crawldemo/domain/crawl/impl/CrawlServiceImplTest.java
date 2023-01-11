@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.hyundai.crawldemo.domain.crawl.constant.CrawlConstant;
-import com.hyundai.crawldemo.domain.crawl.exception.CrawlFailException;
+import com.hyundai.crawldemo.domain.crawl.exception.InvalidUrlException;
 import com.hyundai.crawldemo.domain.crawl.port.CrawlService;
 import java.net.URI;
 import java.util.List;
@@ -41,7 +41,21 @@ class CrawlServiceImplTest {
     URI uri = URI.create(url);
 
     // when & then
-    assertThrows(CrawlFailException.class, () -> crawlService.crawl(uri));
+    assertThrows(InvalidUrlException.class, () -> crawlService.crawl(uri));
+  }
+
+  @Test
+  @DisplayName("url 크롤링 test - uri protocol 정보 (https)가 없는 경우")
+  public void crawlTest_withoutScheme() throws Exception {
+    // given
+    String url = "www.kia.com";
+    URI uri = URI.create(url);
+
+    // when
+    String html = crawlService.crawl(uri);
+
+    // then
+    assertThat(html).isNotBlank();
   }
 
   @Test
@@ -60,7 +74,7 @@ class CrawlServiceImplTest {
   }
 
   @Test
-  @DisplayName("병렬 크롤링 test - 크롤링 실패한 경우")
+  @DisplayName("병렬 크롤링 test - invalid url")
   public void crawlConcurrentlyTest_includeInvalidUrl() throws Exception {
     // given
     String invalidUrl = "https://www.nonexistent.qqq.front";
@@ -68,6 +82,6 @@ class CrawlServiceImplTest {
     List<URI> uris = crawlUrls.stream().map(URI::create).toList();
 
     // when & then
-    assertThrows(CrawlFailException.class, () -> crawlService.crawlByUris(uris));
+    assertThrows(InvalidUrlException.class, () -> crawlService.crawlByUris(uris));
   }
 }
