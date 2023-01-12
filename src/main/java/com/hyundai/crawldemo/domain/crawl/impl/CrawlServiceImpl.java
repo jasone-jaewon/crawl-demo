@@ -1,10 +1,12 @@
 package com.hyundai.crawldemo.domain.crawl.impl;
 
 import com.hyundai.crawldemo.domain.crawl.exception.CrawlFailException;
+import com.hyundai.crawldemo.domain.crawl.exception.CrawlTimeoutException;
 import com.hyundai.crawldemo.domain.crawl.exception.InvalidUrlException;
 import com.hyundai.crawldemo.domain.crawl.model.CrawlResult;
 import com.hyundai.crawldemo.domain.crawl.port.CrawlService;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -36,6 +38,8 @@ public class CrawlServiceImpl implements CrawlService {
       return new CrawlResult(url, document.toString());
     } catch (UnknownHostException e) {
       throw new InvalidUrlException(url);
+    } catch (SocketTimeoutException e) {
+      throw new CrawlTimeoutException(url);
     } catch (IOException e) {
       throw new CrawlFailException(url);
     }

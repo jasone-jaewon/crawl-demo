@@ -34,6 +34,7 @@ public class CrawlController {
       @ApiResponse(responseCode = "200", description = "정상"),
       @ApiResponse(responseCode = "400", description = "invalid url"),
       @ApiResponse(responseCode = "500", description = "Server Error"),
+      @ApiResponse(responseCode = "503", description = "크롤링 timeout"),
   })
   @GetMapping
   public CommonResponse<String> crawlWebSites(@RequestParam(required = false) List<String> urls) {
