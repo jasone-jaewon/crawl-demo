@@ -1,5 +1,6 @@
 package com.hyundai.crawldemo.presentation.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,10 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommonResponse<T> {
 
+  @Schema(description = "상태값")
   private final int status;
+
+  @Schema(description = "결과")
   private final T result;
 
   public static <T> CommonResponse<T> fail(int status) {
