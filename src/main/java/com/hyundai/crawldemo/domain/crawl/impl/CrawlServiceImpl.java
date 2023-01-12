@@ -44,17 +44,4 @@ public class CrawlServiceImpl implements CrawlService {
       throw new CrawlFailException(url);
     }
   }
-
-  /**
-   * url 에 해당하는 html 정보 crawling(병렬)
-   *
-   * @param uris crawling 할 uri list
-   * @return html string
-   */
-  @Override
-  public List<CrawlResult> crawlByUris(List<URI> uris) {
-    return uris.parallelStream()
-        .map(this::crawl)
-        .toList();
-  }
 }

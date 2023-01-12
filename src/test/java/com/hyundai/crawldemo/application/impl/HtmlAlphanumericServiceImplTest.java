@@ -62,7 +62,7 @@ class HtmlAlphanumericServiceImplTest {
 
     when(cacheService.getValue(uri1.toString(), Alphanumeric.class)).thenReturn(
         Optional.of(alphanumeric1));
-    when(crawlService.crawlByUris(List.of(uri2))).thenReturn(List.of(crawlResult2));
+    when(crawlService.crawl(uri2)).thenReturn(crawlResult2);
     when(alphanumericService.parse(crawlResult2)).thenReturn(alphanumeric2);
 
     // when
@@ -81,12 +81,12 @@ class HtmlAlphanumericServiceImplTest {
     // given
     List<URI> uris = Collections.emptyList();
 
-    when(crawlService.crawlByUris(uris)).thenReturn(Collections.emptyList());
-
     // when
     Alphanumeric alphanumeric = htmlAlphanumericService.getAlphanumericFromUris(uris);
 
     // then
+    verify(crawlService, never()).crawl(any());
+
     assertThat(alphanumeric).isNotNull();
     assertThat(alphanumeric.getUpperCases()).isEmpty();
     assertThat(alphanumeric.getLowerCases()).isEmpty();
@@ -108,13 +108,12 @@ class HtmlAlphanumericServiceImplTest {
         Optional.of(alphanumeric1));
     when(cacheService.getValue(uri2.toString(), Alphanumeric.class)).thenReturn(
         Optional.of(alphanumeric2));
-    when(crawlService.crawlByUris(Collections.emptyList())).thenReturn(Collections.emptyList());
 
     // when
     htmlAlphanumericService.getAlphanumericFromUris(uris);
 
     // then
-    verify(crawlService).crawlByUris(Collections.emptyList());
+    verify(crawlService, never()).crawl(any());
     verify(alphanumericService, never()).parse(any());
   }
 
@@ -136,7 +135,8 @@ class HtmlAlphanumericServiceImplTest {
 
     when(cacheService.getValue(uri1.toString(), Alphanumeric.class)).thenReturn(Optional.empty());
     when(cacheService.getValue(uri2.toString(), Alphanumeric.class)).thenReturn(Optional.empty());
-    when(crawlService.crawlByUris(uris)).thenReturn(List.of(crawlResult1, crawlResult2));
+    when(crawlService.crawl(uri1)).thenReturn(crawlResult1);
+    when(crawlService.crawl(uri2)).thenReturn(crawlResult2);
     when(alphanumericService.parse(crawlResult1)).thenReturn(alphanumeric1);
     when(alphanumericService.parse(crawlResult2)).thenReturn(alphanumeric2);
 
@@ -144,6 +144,8 @@ class HtmlAlphanumericServiceImplTest {
     htmlAlphanumericService.getAlphanumericFromUris(uris);
 
     // then
+    verify(crawlService, times(uris.size())).crawl(any());
+    verify(alphanumericService, times(uris.size())).parse(any());
     verify(cacheService, times(uris.size())).setValue(any(), any());
   }
 }

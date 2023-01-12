@@ -13,13 +13,4 @@ public interface CrawlService {
    * @return html string
    */
   CrawlResult crawl(URI url);
-
-  /**
-   * url 에 해당하는 html 정보 crawling(병렬)
-   *
-   * @param urls crawling 할 url 목록
-   * @return html 목록
-   */
-  List<CrawlResult> crawlByUris(List<URI> urls);
-
 }

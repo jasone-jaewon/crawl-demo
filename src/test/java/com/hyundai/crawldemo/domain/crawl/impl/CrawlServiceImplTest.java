@@ -62,36 +62,4 @@ class CrawlServiceImplTest {
     assertThat(result.getUrl()).isEqualTo("https://" + url);
     assertThat(result.getHtml()).isNotBlank();
   }
-
-  @Test
-  @DisplayName("병렬 크롤링 test")
-  public void crawlConcurrentlyTest() throws Exception {
-    // given
-    List<String> crawlUrls = CrawlConstant.CRAWL_URLS;
-    List<URI> uris = crawlUrls.stream().map(URI::create).toList();
-
-    // when
-    List<CrawlResult> results = crawlService.crawlByUris(uris);
-
-    // then
-    assertThat(results).isNotEmpty();
-    assertThat(crawlUrls.size()).isEqualTo(results.size());
-    results.forEach(result -> {
-      assertThat(result).isNotNull();
-      assertThat(result.getUrl()).isIn(crawlUrls);
-      assertThat(result.getHtml()).isNotBlank();
-    });
-  }
-
-  @Test
-  @DisplayName("병렬 크롤링 test - invalid url")
-  public void crawlConcurrentlyTest_includeInvalidUrl() throws Exception {
-    // given
-    String invalidUrl = "https://www.nonexistent.qqq.front";
-    List<String> crawlUrls = List.of(CrawlConstant.KIA_URL, invalidUrl);
-    List<URI> uris = crawlUrls.stream().map(URI::create).toList();
-
-    // when & then
-    assertThrows(InvalidUrlException.class, () -> crawlService.crawlByUris(uris));
-  }
 }
