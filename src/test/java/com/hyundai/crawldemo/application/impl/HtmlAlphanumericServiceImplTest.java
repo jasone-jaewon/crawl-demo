@@ -16,6 +16,7 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,10 +43,10 @@ class HtmlAlphanumericServiceImplTest {
   @DisplayName("uri 목록에 해당하는 html alphanumeric 정보 추출 test")
   public void getAlphanumericFromUrisTest() throws Exception {
     // given
-    List<Character> expectedUpperCases = List.of('C', 'H', 'K');
-    List<Character> expectedLowerCases = List.of('a', 'b', 'c', 'd', 'h', 'i', 'k', 'l', 'm', 'n',
+    Set<Character> expectedUpperCases = Set.of('C', 'H', 'K');
+    Set<Character> expectedLowerCases = Set.of('a', 'b', 'c', 'd', 'h', 'i', 'k', 'l', 'm', 'n',
         'o', 'r', 's', 't', 'u', 'y');
-    List<Character> expectedNumbers = List.of('7', '8', '9');
+    Set<Character> expectedNumbers = Set.of('7', '8', '9');
 
     URI uri1 = URI.create("https://www.kia.com");
     URI uri2 = URI.create("https://www.hyundai.com");
