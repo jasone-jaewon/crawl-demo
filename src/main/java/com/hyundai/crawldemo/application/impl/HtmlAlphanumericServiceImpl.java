@@ -31,7 +31,9 @@ public class HtmlAlphanumericServiceImpl implements HtmlAlphanumericService {
         .ifPresentOrElse(alphanumerics::add, () -> notCachedUris.add(uri))
     );
 
-    List<CrawlResult> crawlResults = crawlService.crawlByUris(notCachedUris);
+    List<CrawlResult> crawlResults = notCachedUris.parallelStream()
+        .map(crawlService::crawl)
+        .toList();
 
     crawlResults.forEach(crawlResult -> {
       Alphanumeric parsedAlphanumeric = alphanumericService.parse(crawlResult);
