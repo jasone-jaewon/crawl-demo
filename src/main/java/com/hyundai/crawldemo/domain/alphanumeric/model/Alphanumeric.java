@@ -1,5 +1,6 @@
 package com.hyundai.crawldemo.domain.alphanumeric.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -13,9 +14,9 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Alphanumeric {
 
-  private final List<Character> upperCases;
-  private final List<Character> lowerCases;
-  private final List<Character> numbers;
+  private final Set<Character> upperCases;
+  private final Set<Character> lowerCases;
+  private final Set<Character> numbers;
 
   /**
    * 생성 method - 각 문자를 대문자, 소문자, 숫자로 구분하여 멤버변수로 저장
@@ -26,9 +27,9 @@ public class Alphanumeric {
   public static Alphanumeric createByString(String input) {
     if (!StringUtils.hasText(input)) {
       return new Alphanumeric(
-          Collections.emptyList(),
-          Collections.emptyList(),
-          Collections.emptyList()
+          Collections.emptySet(),
+          Collections.emptySet(),
+          Collections.emptySet()
       );
     }
 
@@ -51,12 +52,7 @@ public class Alphanumeric {
       }
     }
 
-    // TODO: 2023/01/11 sorted 효율 수정
-    return new Alphanumeric(
-        upperCases.stream().sorted().toList(),
-        lowerCases.stream().sorted().toList(),
-        numbers.stream().sorted().toList()
-    );
+    return new Alphanumeric(upperCases, lowerCases, numbers);
   }
 
   /**
@@ -75,12 +71,7 @@ public class Alphanumeric {
       numbers.addAll(new HashSet<>(alphanumeric.getNumbers()));
     });
 
-    // TODO: 2023/01/11 sorted 효율 수정(출력 할때 정렬)
-    return new Alphanumeric(
-        upperCases.stream().sorted().toList(),
-        lowerCases.stream().sorted().toList(),
-        numbers.stream().sorted().toList()
-    );
+    return new Alphanumeric(upperCases, lowerCases, numbers);
   }
 
   /**
@@ -93,15 +84,24 @@ public class Alphanumeric {
     int maxLength = Math.max(this.lowerCases.size(), this.upperCases.size());
     maxLength = Math.max(maxLength, this.numbers.size());
 
+    List<Character> upperCaseList = new ArrayList<>(this.upperCases);
+    Collections.sort(upperCaseList);
+
+    List<Character> lowerCaseList = new ArrayList<>(this.lowerCases);
+    Collections.sort(lowerCaseList);
+
+    List<Character> numberList = new ArrayList<>(this.numbers);
+    Collections.sort(numberList);
+
     for (int i = 0; i < maxLength; i++) {
-      if (this.upperCases.size() > i) {
-        builder.append(this.upperCases.get(i));
+      if (upperCaseList.size() > i) {
+        builder.append(upperCaseList.get(i));
       }
-      if (this.lowerCases.size() > i) {
-        builder.append(this.lowerCases.get(i));
+      if (lowerCaseList.size() > i) {
+        builder.append(lowerCaseList.get(i));
       }
-      if (this.numbers.size() > i) {
-        builder.append(this.numbers.get(i));
+      if (numberList.size() > i) {
+        builder.append(numberList.get(i));
       }
     }
 

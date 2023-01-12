@@ -3,6 +3,7 @@ package com.hyundai.crawldemo.domain.alphanumeric.model;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +14,9 @@ class AlphanumericTest {
   public void constructorTest() throws Exception {
     // given
     String input = "aAdE125FGk8";
-    List<Character> expectedLowerCases = List.of('a', 'd', 'k');
-    List<Character> expectedUpperCases = List.of('A', 'E', 'F', 'G');
-    List<Character> expectedNumbers = List.of('1', '2', '5', '8');
+    Set<Character> expectedLowerCases = Set.of('a', 'd', 'k');
+    Set<Character> expectedUpperCases = Set.of('A', 'E', 'F', 'G');
+    Set<Character> expectedNumbers = Set.of('1', '2', '5', '8');
 
     // when
     Alphanumeric alphanumeric = Alphanumeric.createByString(input);
@@ -30,11 +31,8 @@ class AlphanumericTest {
   @Test
   @DisplayName("생성자 test - input null")
   public void constructorTest_null() throws Exception {
-    // given
-    String input = null;
-
     // when
-    Alphanumeric alphanumeric = Alphanumeric.createByString(input);
+    Alphanumeric alphanumeric = Alphanumeric.createByString(null);
 
     // then
     assertThat(alphanumeric).isNotNull();
@@ -49,9 +47,9 @@ class AlphanumericTest {
     // given
     Alphanumeric alphanumeric1 = Alphanumeric.createByString("aAdE125FGk8");
     Alphanumeric alphanumeric2 = Alphanumeric.createByString("fEThNV5FGgeoi120");
-    List<Character> expectedUpperCases = List.of('A', 'E', 'F', 'G', 'N', 'T', 'V');
-    List<Character> expectedLowerCases = List.of('a', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'o');
-    List<Character> expectedNumbers = List.of('0', '1', '2', '5', '8');
+    Set<Character> expectedUpperCases = Set.of('A', 'E', 'F', 'G', 'N', 'T', 'V');
+    Set<Character> expectedLowerCases = Set.of('a', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'o');
+    Set<Character> expectedNumbers = Set.of('0', '1', '2', '5', '8');
 
 
     // when
@@ -84,9 +82,8 @@ class AlphanumericTest {
   @DisplayName("문자열 병합 Test - 빈 객체")
   public void mergeToStringTest_emptyString() throws Exception {
     // given
-    String input = null;
     String expected = "";
-    Alphanumeric alphanumeric = Alphanumeric.createByString(input);
+    Alphanumeric alphanumeric = Alphanumeric.createByString(null);
 
     // when
     String merge = alphanumeric.mergeToString();
