@@ -3,12 +3,10 @@ package com.hyundai.crawldemo.domain.crawl.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.hyundai.crawldemo.domain.crawl.constant.CrawlConstant;
 import com.hyundai.crawldemo.domain.crawl.exception.InvalidUrlException;
 import com.hyundai.crawldemo.domain.crawl.model.CrawlResult;
 import com.hyundai.crawldemo.domain.crawl.port.CrawlService;
 import java.net.URI;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
